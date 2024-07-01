@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./AddLocationInfo.css" />
+    <title>AddLocationInfo</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-light absolute py-2 mb-4">
+    <div class="container">
+        <div class=" navbar-collapse " id="navbarCollapse">
+            <ul class="navbar-nav mx-auto">
+                <a class="navbar-brand">
+                    <h2><b>T Maps</b></h2>
+                </a>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+ <div class="content">
+ <form action="{{ route('store') }}" method="post">
+            <div class="mapform" >
+                <div class="row">
+                    <div class="col-5">
+                        <input type="text" class="form-control" placeholder="lat" name="lat" id="lat">
+                    </div>
+                    <div class="col-5">
+                        <input type="text" class="form-control" placeholder="lng" name="lng" id="lng">
+                    </div>
+                </div>
+                <div id="map" style="height:400px; width: 800px;" class="my-3"></div>
+                
+                <script type="text/javascript" src="AddLocationInfo.js"></script>
+<script>
+    let map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat:19.0760,lng:72.8777 },
+            zoom: 8,
+            scrollwheel: true,
+        });
+
+        const mumbai = { lat:19.0760,lng:72.8777 };
+        let marker = new google.maps.Marker({
+            position: mumbai,
+            map: map,
+            draggable: true
+        });
+
+        google.maps.event.addListener(marker,'position_changed',
+            function (){
+                let lat = marker.position.lat()
+                let lng = marker.position.lng()
+                $('#lat').val(lat)
+                $('#lng').val(lng)
+                $('#lati').val(lat)
+                $('#lon').val(lng)
+            })
+
+        google.maps.event.addListener(map,'click',
+        function (event){
+            pos = event.latLng
+            marker.setPosition(pos)
+        })
+    }
+</script>
+<script>
+    function Submit_LatLng()
+    {
+        var lat=document.getElementById("lat").value;
+        var lng=document.getElementById("lng").value;
+        var name_of_location=document.getElementById("name_of_location").value;
+        var Timeslots=document.getElementById("Timeslots").value;
+        var upload=document.getElementById("upload").value;
+        
+        console.log("lat"+ lat);
+        console.log("lng"+ lng);
+        console.log("name_of_location"+ name_of_location);
+        console.log("lTimeslotsng"+ Timeslots);
+        console.log("upload"+upload);
+        if(lat !="")
+        {
+            $.ajax({
+                type:"POST",
+                data:{
+                    'action':'submit_latlng',
+                    'lat':'lat',
+                    'lng':'lng',
+                    'name_of_location':name_of_location,
+                    'Timeslots':Timeslots,
+                    'upload':upload
+                },
+                url:"Lat_lng_DB.php",
+                async:false,
+                success:function(response){
+                    if(response == 'Done') {
+                        Clearlat();
+                        alert("Latitide and Longitude has been submitted successfully");
+                        window.location.reload();
+                    } 
+                    elseif(response == "No") 
+                    {
+                        alert("Failed to submit lat try again");
+                    }
+
+                    elseif(response == "NoData") 
+                    {
+                        alert("Please ENter lat");
+                    }
+            },
+            error:function(error){
+                setTimeout(function(){
+                    keep_alive1();
+                }, 3000);
+            }
+        });
+        }
+        else{
+            alert("Please enter lat");
+        }
+    }
+    </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwSVZOcSkQL8xVWCrqNPQg25cZsN_n60s&callback=initMap&libraries=places&v=weekly"
+       type="text/javascript" ></script>
+</div>
+
+</form>
+<div class="wrapper">
+    <form action="Lat_lng_DB.php" method="post" enctype="multipart/form-data">
+        <div class="input-box">
+            <input type="hidden" name="lati" id="lati" />
+            <input type="hidden" name="lon" id="lon" />
+            <div class="input-field">
+                <input type="text" placeholder="Name of Location" name="name_of_location" id="name_of_location" required>
+            </div>
+            <div class="input-timeslot">
+                <label for="Timeslots"><b>Timings of Construction:</b></label>
+                <select name="Timeslots" id="Timeslots" required>
+                    <option value="1">06:00-12:00</option>
+                    <option value="5">06:00-:18:00</option>
+                    <option value="5">06:00-00:00</option>
+                    <option value="4">00:00-06-00</option>
+                    <option value="4">00:00-12-00</option>
+                    <option value="4">12:00-18-00</option>
+                    <option value="3">18:00-00:00</option>
+                    <option value="3">18:00-06:00</option>
+                  </select>
+            </div>
+            <div class="input-Etime">
+                <label for="Estimate_completion_time"><b>Estimate Completion time:</b></label>
+                <select name="Select_time" id="Select_time" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </select>
+                  <select name="Select_duration" id="Select_duration" required>
+                    <option value="days">Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                  </select>
+            </div>
+        </div>
+            <div class="upload">
+                    <b>Upload image of road contruction as proof</b><br/>
+                    <input type="file" name="image_file" required accept=".jpeg,.png,.jpg,.gif"/><br/>
+                </div>
+                <input type="Cancel" placeholder="Cancel" class="btn-cancel btn-secondary">
+<input type="submit" class="btn btn-primary" name="btnSubmit" value="Submit">
+    </form>
+</div>
+
+
+
+</div>
+
+
+ </div>
+</body>
+</html>

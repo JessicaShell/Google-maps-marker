@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="./DeleteLocationInfo.css" />
+    <title>DeleteLocationinfo</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light absolute py-2 mb-4">
+        <div class="container">
+            <div class=" navbar-collapse " id="navbarCollapse">
+                <ul class="navbar-nav mx-auto">
+                    <a class="navbar-brand">
+                        <h2><b>T Maps</b></h2>
+                    </a>
+                </ul>
+                
+    
+            </div>
+           
+        </div>
+    </nav>
+    <div class="content">
+        <form method="POST" action="Delete_DB.php">
+                   <div class="mapform" >
+                       <div class="row">
+                           <div class="col-5">
+                               <input type="text" class="form-control" placeholder="lat" name="lat" id="lat">
+                           </div>
+                           <div class="col-5">
+                               <input type="text" class="form-control" placeholder="lng" name="lng" id="lng">
+                           </div>
+                       </div>
+                       <div id="map" style="height:450px; width: 900px;" class="my-3"></div>
+                       
+                       <script type="text/javascript" src="AddLocationInfo.js"></script>
+       <script>
+           let map;
+           function initMap() {
+               map = new google.maps.Map(document.getElementById("map"), {
+                   center: { lat:18.9547,lng: 72.8139},
+                   zoom: 8,
+                   scrollwheel: true,
+               });
+       
+               const mumbai = {  lat:18.9547,lng: 72.8139 };
+               let marker = new google.maps.Marker({
+                   position: mumbai,
+                   map: map,
+                   //draggable: true
+               });
+       
+               google.maps.event.addListener(marker,'position_changed',
+                   function (){
+                       let lat = marker.position.lat()
+                       let lng = marker.position.lng()
+                       $('#lat').val(lat)
+                       $('#lng').val(lng)
+                   })
+       
+               google.maps.event.addListener(map,'click',
+               function (event){
+                   pos = event.latLng
+                   marker.setPosition(pos)
+               })
+           }
+       </script>
+       <script>
+           function Submit_LatLng()
+           {
+               var lat=document.getElementById("lat").value;
+               var lng=document.getElementById("lng").value;
+               
+               console.log("lat"+ lat);
+               console.log("lng"+ lng);
+             
+               if(lat !="")
+               {
+                   $.ajax({
+                       type:"POST",
+                       data:{
+                           'btnSubmit':'Delete',
+                           'lat':'lat',
+                           'lng':'lng'
+                       },
+                       url:"Delete_DB.php",
+                       async:false,
+                       success:function(response){
+                           if(response == 'Done') {
+                               Clearlat();
+                               alert("Latitide and Longitude deleted successfully");
+                               window.location.reload();
+                           } 
+                           elseif(response == "Failed") 
+                           {
+                               alert("Failed to submit lat try again");
+                           }
+       
+                           elseif(response == "NotDone") 
+                           {
+                               alert("Please ENter lat");
+                           }
+                   },
+                   error:function(error){
+                       setTimeout(function(){
+                           keep_alive1();
+                       }, 3000);
+                   }
+               });
+               }
+               else{
+                   alert("Please enter lat");
+               }
+           }
+           </script>
+       </script>
+       
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwSVZOcSkQL8xVWCrqNPQg25cZsN_n60s&callback=initMap&libraries=places&v=weekly"
+        type="text/javascript" ></script> 
+        <h8><i><b>Select the Marker you want to delete from map and submit</b></i></h8>
+        <input type="submit" placeholder="Cancel" class="btn-cancel btn-secondary" value="Cancel">
+        <input type="submit" class="btn btn-primary" name="btnSubmit" value="Delete">
+    </form>
+        <script type="text/javascript" src="../Homepage/index.js"></script>
+</body>
+</html>
