@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <link rel="stylesheet" href="RegisterStyle.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+</head>
+<body>
+    <div class="wrapper">
+        <form action="User_Reg_DB.php" method="post">
+            <h1>Registration</h1>
+            <div class="input-box">
+                <div class="input-field">
+                    <input type="text" placeholder="First Name" name="firstname" id="firstname" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+                <div class="input-field">
+                    <input type="text" placeholder="Last Name" name="lastname" id="lastname" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <input type="email" name="email" id="email" placeholder="Email" required>
+                    <i class="bx bxs-envelope"></i>
+                </div>
+                <div class="input-field">
+                    <input type="text" maxlength="10" name="phoneNo" id="phoneNo" pattern="[6789]{1}[0-9]{9}" placeholder="Phone" required>
+                    <i class="bx bxs-phone"></i>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-field">
+                    <input type="password" name="passwd" id="passwd" placeholder="Password" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="confirmPasswd" id="confirmPasswd" placeholder="Confirm Password" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+            </div>
+            <label>
+                <input type="checkbox"> I hereby declare that the above information provided is true and correct</label>
+
+                <button type="submit" class="btn" name="btnSubmit" value="UserRegister">Register</button>
+        </form>
+    </div>
+</body>
+</html>
