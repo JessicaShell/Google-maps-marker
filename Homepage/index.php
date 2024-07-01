@@ -114,7 +114,7 @@
     <script type="text/javascript" src="index.js"></script>
 
     <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwSVZOcSkQL8xVWCrqNPQg25cZsN_n60s&callback=initMap&libraries=places&v=weekly"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwSZOcSkQL8xVWCrqNPQg25cZsN_n60s&callback=initMap&libraries=places&v=weekly"
     defer 
   ></script>  
    
